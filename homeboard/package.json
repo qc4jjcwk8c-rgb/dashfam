@@ -1,0 +1,19 @@
+{
+  "name": "homeboard",
+  "version": "1.0.0",
+  "description": "Family dashboard — Calendar & Recipes",
+  "scripts": {
+    "dev": "netlify dev",
+    "build": "echo 'No build step required for vanilla JS'"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0",
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "netlify-cli": "^17.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
