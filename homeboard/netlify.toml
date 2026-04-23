@@ -1,7 +1,10 @@
 [build]
-  base = "homeboard"
   publish = "public"
   functions = "netlify/functions"
+
+[dev]
+  port = 8888
+  targetPort = 3000
 
 [[redirects]]
   from = "/api/*"

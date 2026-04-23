@@ -110,9 +110,11 @@ const Auth = {
   },
 };
 
-// Handle auth state changes
+// Handle auth state changes — only act on explicit sign in/out events
+// Page load session restore is handled separately below
 supabaseClient.auth.onAuthStateChange(async (event, session) => {
-  if (event === 'SIGNED_IN' && session) {
+  if (event === 'SIGNED_IN' && session && !App.myProfile) {
+    // Only fires for actual new logins, not page reloads
     try {
       const data = await API.auth.me();
       if (data?.profile?.family_id) {
@@ -137,6 +139,19 @@ supabaseClient.auth.onAuthStateChange(async (event, session) => {
   const { data: { session } } = await supabaseClient.auth.getSession();
   if (!session) {
     document.getElementById('authScreen').classList.remove('hidden');
+  } else {
+    // Session exists — load app directly without waiting for onAuthStateChange
+    try {
+      const data = await API.auth.me();
+      if (data?.profile?.family_id) {
+        App.initWithData(data);
+      } else {
+        document.getElementById('authScreen').classList.remove('hidden');
+        Auth.showSetup();
+      }
+    } catch {
+      document.getElementById('authScreen').classList.remove('hidden');
+      Auth.showLogin();
+    }
   }
-  // If session exists, onAuthStateChange will fire SIGNED_IN
 })();
